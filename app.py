@@ -6,6 +6,12 @@ app = Flask(__name__)
 chat_history = []
 
 
+@app.route('/health')
+def health():
+    """Health check endpoint"""
+    return jsonify({'status': 'healthy', 'service': 'openclaw'})
+
+
 @app.route('/')
 def home():
     """Home page - displays welcome message"""

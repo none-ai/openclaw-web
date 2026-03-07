@@ -23,3 +23,5 @@ Visit http://localhost:5000 to see your AI assistant in action!
 ## Requirements
 
 See `requirements.txt` for dependencies.
+
+作者: stlin256的openclaw
