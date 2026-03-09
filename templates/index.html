@@ -5,52 +5,124 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>openclaw - Your Personal AI Assistant 🦞</title>
     <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        :root {
+            --bg-primary: #1a1a2e;
+            --bg-secondary: #16213e;
+            --accent: #e94560;
+            --text: #fff;
+            --text-muted: #aaa;
+        }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
             padding: 50px 20px;
             text-align: center;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            color: #fff;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            color: var(--text);
             min-height: 100vh;
         }
         .logo {
             font-size: 80px;
             margin-bottom: 20px;
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
         h1 {
-            font-size: 2.5em;
+            font-size: 3em;
             margin-bottom: 10px;
+            background: linear-gradient(135deg, #fff 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
         .tagline {
-            font-size: 1.2em;
-            color: #aaa;
-            margin-bottom: 40px;
+            font-size: 1.3em;
+            color: var(--text-muted);
+            margin-bottom: 50px;
         }
         .features {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin: 40px 0;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin: 50px 0;
         }
         .feature {
+            background: rgba(255,255,255,0.05);
+            padding: 30px;
+            border-radius: 16px;
+            transition: transform 0.3s, background 0.3s;
+            text-align: left;
+        }
+        .feature:hover {
+            transform: translateY(-5px);
             background: rgba(255,255,255,0.1);
-            padding: 20px;
-            border-radius: 10px;
+        }
+        .feature-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+        }
+        .feature h3 {
+            font-size: 1.3em;
+            margin-bottom: 10px;
+            color: var(--accent);
+        }
+        .feature p {
+            color: var(--text-muted);
+            line-height: 1.6;
         }
         .btn {
             display: inline-block;
-            background: #e94560;
+            background: var(--accent);
             color: white;
-            padding: 15px 40px;
+            padding: 18px 50px;
             text-decoration: none;
             border-radius: 50px;
             font-size: 1.2em;
-            transition: transform 0.2s;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 15px rgba(233, 69, 96, 0.3);
         }
         .btn:hover {
             transform: scale(1.05);
+            box-shadow: 0 6px 25px rgba(233, 69, 96, 0.5);
+        }
+        .links {
+            margin-top: 40px;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+        }
+        .links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+        .links a:hover {
+            color: var(--accent);
+        }
+        .api-info {
+            background: rgba(255,255,255,0.05);
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 40px;
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+        .api-info code {
+            background: rgba(0,0,0,0.3);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: 'Monaco', 'Menlo', monospace;
         }
     </style>
 </head>
@@ -61,19 +133,47 @@
 
     <div class="features">
         <div class="feature">
+            <div class="feature-icon">🤖</div>
+            <h3>AI-Powered</h3>
+            <p>Integrates with Claude API for intelligent conversations. Configure your API key for full AI capabilities.</p>
+        </div>
+        <div class="feature">
+            <div class="feature-icon">💬</div>
+            <h3>Multi-Conversation</h3>
+            <p>Create and manage multiple conversations. Each conversation maintains its own history and context.</p>
+        </div>
+        <div class="feature">
+            <div class="feature-icon">📤</div>
+            <h3>Export & Share</h3>
+            <p>Export your conversations in JSON or Markdown format. Perfect for documentation and sharing.</p>
+        </div>
+        <div class="feature">
+            <div class="feature-icon">🎨</div>
+            <h3>Modern UI</h3>
+            <p>Beautiful dark theme with responsive design. Smooth animations and intuitive user experience.</p>
+        </div>
+        <div class="feature">
+            <div class="feature-icon">📱</div>
             <h3>Cross-Platform</h3>
-            <p>Works on any operating system</p>
+            <p>Works on any operating system. Access your AI assistant from any device with a browser.</p>
         </div>
         <div class="feature">
-            <h3>Easy to Use</h3>
-            <p>Simple and intuitive interface</p>
-        </div>
-        <div class="feature">
-            <h3>Open Source</h3>
-            <p>Free and customizable</p>
+            <div class="feature-icon">🔒</div>
+            <h3>Privacy First</h3>
+            <p>Your conversations are stored locally. Full control over your data and privacy.</p>
         </div>
     </div>
 
     <a href="/chat" class="btn">Start Chatting</a>
+
+    <div class="api-info">
+        <p>To enable AI responses, set the environment variable:</p>
+        <p><code>ANTHROPIC_API_KEY=your_api_key</code></p>
+    </div>
+
+    <div class="links">
+        <a href="https://github.com/stlin256/openclaw" target="_blank">GitHub</a>
+        <a href="/health">API Status</a>
+    </div>
 </body>
 </html>
