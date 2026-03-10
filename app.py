@@ -1,10 +1,28 @@
 import os
 import json
+import uuid
+import logging
 from datetime import datetime
-from flask import Flask, render_template, request, jsonify, Response, stream_with_context
+from flask import Flask, render_template, request, jsonify, Response, stream_with_context, g
 from anthropic import Anthropic
 
+# Configure logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
+
 app = Flask(__name__)
+
+# Request ID middleware
+@app.before_request
+def before_request():
+    g.request_id = str(uuid.uuid4())[:8]
+    logger.info(f"[{g.request_id}] {request.method} {request.path}")
+
+@app.after_request
+def after_request(response):
+    logger.info(f"[{g.request_id}] Status: {response.status_code}")
+    response.headers['X-Request-ID'] = g.request_id
+    return response
 
 # Configuration
 app.config['ANTHROPIC_API_KEY'] = os.environ.get('ANTHROPIC_API_KEY', '')
