@@ -27,6 +27,7 @@ def after_request(response):
 # Configuration
 app.config['ANTHROPIC_API_KEY'] = os.environ.get('ANTHROPIC_API_KEY', '')
 app.config['DEFAULT_MODEL'] = os.environ.get('DEFAULT_MODEL', 'claude-3-5-sonnet-20241022')
+app.config['MAX_MESSAGES'] = int(os.environ.get('MAX_MESSAGES', 100))  # Max messages per conversation
 
 # Initialize Anthropic client (lazy loading)
 _client = None
@@ -327,8 +328,28 @@ def get_settings():
     """Get application settings (non-sensitive)"""
     return jsonify({
         'model': app.config['DEFAULT_MODEL'],
-        'api_configured': bool(app.config['ANTHROPIC_API_KEY'])
+        'api_configured': bool(app.config['ANTHROPIC_API_KEY']),
+        'max_messages': app.config['MAX_MESSAGES']
     })
+
+
+@app.route('/api/conversations/<conv_id>/title', methods=['PUT'])
+def update_conversation_title(conv_id):
+    """Update conversation title"""
+    data = request.get_json() or {}
+    new_title = data.get('title')
+    
+    if not new_title:
+        return jsonify({'error': 'Title is required'}), 400
+    
+    conv = conversations.get(conv_id)
+    if not conv:
+        return jsonify({'error': 'Conversation not found'}), 404
+    
+    conv['title'] = new_title
+    conv['updated_at'] = datetime.now().isoformat()
+    
+    return jsonify({'id': conv_id, 'title': new_title, 'status': 'updated'})
 
 
 if __name__ == '__main__':
